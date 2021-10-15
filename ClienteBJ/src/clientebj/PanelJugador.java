@@ -1,5 +1,6 @@
 package clientebj;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -23,6 +25,8 @@ public class PanelJugador extends JPanel {
 	//variables para control del graficado
 	private ArrayList<Recuerdo> dibujoRecordar;
 	private int x;
+	
+
 	    
 	public PanelJugador(String nombreJugador) {
 		//this.setBackground(Color.GREEN);
@@ -31,6 +35,8 @@ public class PanelJugador extends JPanel {
 		TitledBorder bordes;
 		bordes = BorderFactory.createTitledBorder(nombreJugador);
 		this.setBorder(bordes);
+		
+		
 	}
 	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
@@ -58,6 +64,9 @@ public class PanelJugador extends JPanel {
 			g.drawString(dibujoRecordar.get(i).getCartaRecordar(), dibujoRecordar.get(i).getxRecordar(),35);
 		}	
 	}
+	
+	
+	
 	
 	private class Recuerdo{
 		private Carta cartaRecordar;

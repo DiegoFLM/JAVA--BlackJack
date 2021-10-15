@@ -27,7 +27,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 	    
 		private PanelJugador dealer, yo, jugador2, jugador3;
 		private JTextArea areaMensajes;
-		private JButton pedir, plantar;
+		private JButton pedir, plantar, bNuevaRonda;
 		private JPanel panelYo, panelBotones, yoFull, panelDealer,panelJugador2, panelJugador3;
 		
 		private String yoId, jugador2Id, jugador3Id;
@@ -83,6 +83,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 			
 			
 			panelJugador2 = new JPanel();
+			//panelJugador2.setPreferredSize(new Dimension(206,150));
 			jugador2= new PanelJugador(jugador2Id);	
 			panelJugador2.add(jugador2);
 			
@@ -96,8 +97,9 @@ public class VentanaSalaJuego extends JInternalFrame {
 			//add(panelJugador2,BorderLayout.EAST);	
 			
 			panelJugador3 = new JPanel();
+			//panelJugador3.setPreferredSize(new Dimension(206,150));
 			jugador3= new PanelJugador(jugador3Id);	
-			panelJugador2.add(jugador3);
+			panelJugador3.add(jugador3);
 			
 			constraints.gridx = 3;		
 	 		constraints.gridy =1;
@@ -138,7 +140,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 			panelYo = new JPanel();
 			panelYo.setLayout(new BorderLayout());
 			yo = new PanelJugador(yoId);
-			panelYo.add(yo);
+			panelYo.add(yo, BorderLayout.CENTER);
 				
 			pedir = new JButton("Carta");
 			pedir.setEnabled(false);
@@ -146,12 +148,23 @@ public class VentanaSalaJuego extends JInternalFrame {
 			plantar = new JButton("Plantar");
 			plantar.setEnabled(false);
 			plantar.addActionListener(escucha);
+			
+			
+			bNuevaRonda = new JButton("Nueva Ronda");
+			bNuevaRonda.setEnabled(true);
+			bNuevaRonda.addActionListener(escucha);
+			
+			
 			panelBotones = new JPanel();
 			panelBotones.add(pedir);
 			panelBotones.add(plantar);
+			//panelBotones.add(bNuevaRonda);
+			
+			
+			//panelYo.add(panelBotones, BorderLayout.SOUTH);
 			
 			yoFull = new JPanel();
-			yoFull.setPreferredSize(new Dimension(206,100));
+			yoFull.setPreferredSize(new Dimension(206,150));
 			yoFull.add(panelYo);
 			yoFull.add(panelBotones);
 			
