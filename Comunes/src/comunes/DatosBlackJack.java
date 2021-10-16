@@ -12,6 +12,8 @@ public class DatosBlackJack implements Serializable{
 	private String mensaje;
 	private String jugador,jugadorEstado;
 	
+	private String[] apuestas; //* added apuestas
+	
 	public String getJugador() {
 		return jugador;
 	}
@@ -32,6 +34,21 @@ public class DatosBlackJack implements Serializable{
 	public void setIdJugadores(String[] idJugadores) {
 		this.idJugadores = idJugadores;
 	}
+	
+	
+	
+	//* added apuestas
+	public String[] getApuestas() {
+		return apuestas;
+	}
+	
+	public void setApuestas(String[] apuestas) {
+		this.apuestas = apuestas;
+	}
+	//*
+	
+	
+	
 	
 	public ArrayList<Carta> getManoJugador1() {
 		return manoJugador1;

@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 public class VentanaEspera extends JInternalFrame {
 	private JLabel enEspera, jugador;
 	
-	public VentanaEspera(String jugador) {
+	public VentanaEspera(String jugador) {//*NOT added apuestas
         initInternalFrame(jugador);
 		
 		this.setTitle("Bienvenido a la sala de espera");
