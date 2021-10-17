@@ -251,7 +251,8 @@ public class ServidorBJ implements Runnable{
         	
     	if(entrada.equals("pedir")) {
     		//dar carta 
-    		mostrarMensaje("Se envió carta al jugador "+idJugadores[indexJugador]);
+    		//mostrarMensaje("Se envió carta al jugador "+ idJugadores[indexJugador]); 
+    		mostrarMensaje("Se envió carta al jugador "+ idJugadoresSinApu[indexJugador]);//*added apuestas
     		Carta carta = mazo.getCarta();
     		//adicionar la carta a la mano del jugador en turno
     		manosJugadores.get(indexJugador).add(carta);
@@ -262,6 +263,7 @@ public class ServidorBJ implements Runnable{
 			datosEnviar.setValorManos(valorManos);
 			datosEnviar.setCarta(carta);
 			datosEnviar.setJugador(idJugadores[indexJugador]);
+			
 		
 			
 			datosEnviar.setApuestas(strArray(apuestas));	//*added apuestas
@@ -271,7 +273,8 @@ public class ServidorBJ implements Runnable{
 			//mandar mensaje a todos los jugadores
     		if(valorManos[indexJugador]>21) {
     			//jugador Voló
-	    		datosEnviar.setMensaje(idJugadores[indexJugador]+" tienes "+valorManos[indexJugador]+" volaste :(");	
+	    		//datosEnviar.setMensaje(idJugadores[indexJugador]+" tienes "+valorManos[indexJugador]+" volaste :(");	
+	    		datosEnviar.setMensaje(idJugadoresSinApu[indexJugador]+" tienes "+valorManos[indexJugador]+" volaste :(");//*added apuestas	
 	    		datosEnviar.setJugadorEstado("voló");
 	    		
 	    		//* added apuestas
@@ -292,7 +295,8 @@ public class ServidorBJ implements Runnable{
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setJugador(idJugadores[1]);
 					datosEnviar.setJugadorEstado("iniciar");
-					datosEnviar.setMensaje(idJugadores[1]+" te toca jugar y tienes " + valorManos[1]);
+					//datosEnviar.setMensaje(idJugadores[1]+" te toca jugar y tienes " + valorManos[1]);
+					datosEnviar.setMensaje(idJugadoresSinApu[1]+" te toca jugar y tienes " + valorManos[1]);//*added apuestas
 					
 					//* added apuestas
 		    		apuestas[indexJugador] = 0;
@@ -320,8 +324,8 @@ public class ServidorBJ implements Runnable{
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setJugador(idJugadores[2]);
 					datosEnviar.setJugadorEstado("iniciar");
-					datosEnviar.setMensaje(idJugadores[2]+" te toca jugar y tienes "+valorManos[2]);
-					
+					//datosEnviar.setMensaje(idJugadores[2]+" te toca jugar y tienes "+valorManos[2]);
+					datosEnviar.setMensaje(idJugadoresSinApu[2]+" te toca jugar y tienes "+valorManos[2]);//*added apuestas
 					//* added apuestas
 		    		apuestas[indexJugador] = 0;
 		    		datosEnviar.setApuestas(strArray(apuestas));
@@ -393,7 +397,8 @@ public class ServidorBJ implements Runnable{
     		}else {//jugador no se pasa de 21 puede seguir jugando
     			datosEnviar.setCarta(carta);
     			datosEnviar.setJugador(idJugadores[indexJugador]);
-    			datosEnviar.setMensaje(idJugadores[indexJugador]+" ahora tienes "+valorManos[indexJugador]);
+    			//datosEnviar.setMensaje(idJugadores[indexJugador]+" ahora tienes "+valorManos[indexJugador]);
+    			datosEnviar.setMensaje(idJugadoresSinApu[indexJugador]+" ahora tienes "+valorManos[indexJugador]);//*added apuestas
 	    		datosEnviar.setJugadorEstado("sigue");
 	    		
 	    		jugadores[0].enviarMensajeCliente(datosEnviar);
@@ -406,7 +411,9 @@ public class ServidorBJ implements Runnable{
     		datosEnviar.setIdJugadores(idJugadores);
 			datosEnviar.setValorManos(valorManos);
 			datosEnviar.setJugador(idJugadores[indexJugador]);
-    		datosEnviar.setMensaje(idJugadores[indexJugador]+" se plantó");
+			
+    		//datosEnviar.setMensaje(idJugadores[indexJugador]+" se plantó");
+    		datosEnviar.setMensaje(idJugadoresSinApu[indexJugador]+" se plantó");
     		datosEnviar.setJugadorEstado("plantó");
     		
     		jugadores[0].enviarMensajeCliente(datosEnviar);		    		
@@ -421,7 +428,8 @@ public class ServidorBJ implements Runnable{
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setJugador(idJugadores[1]);
 				datosEnviar.setJugadorEstado("iniciar");
-				datosEnviar.setMensaje(idJugadores[1]+" te toca jugar y tienes "+valorManos[1]);
+				//datosEnviar.setMensaje(idJugadores[1]+" te toca jugar y tienes "+valorManos[1]);
+				datosEnviar.setMensaje(idJugadoresSinApu[1]+" te toca jugar y tienes "+valorManos[1]);
 				
 				jugadores[0].enviarMensajeCliente(datosEnviar);
 				jugadores[1].enviarMensajeCliente(datosEnviar);
@@ -445,7 +453,8 @@ public class ServidorBJ implements Runnable{
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setJugador(idJugadores[2]);
 				datosEnviar.setJugadorEstado("iniciar");
-				datosEnviar.setMensaje(idJugadores[2]+" te toca jugar y tienes "+valorManos[2]);
+				//datosEnviar.setMensaje(idJugadores[2]+" te toca jugar y tienes "+valorManos[2]);
+				datosEnviar.setMensaje(idJugadoresSinApu[2]+" te toca jugar y tienes "+valorManos[2]);//*added apuestas
 				
 				jugadores[0].enviarMensajeCliente(datosEnviar);
 				jugadores[1].enviarMensajeCliente(datosEnviar);
@@ -583,7 +592,8 @@ public class ServidorBJ implements Runnable{
 				datosEnviar.setManoJugador3(manosJugadores.get(2));
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
-				datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+				//datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+				datosEnviar.setMensaje("Inicias "+idJugadoresSinApu[0]+" tienes "+valorManos[0]);//*added apuestas
 				enviarMensajeCliente(datosEnviar);
 				jugadorEnTurno=0;
 				
@@ -604,7 +614,8 @@ public class ServidorBJ implements Runnable{
 				try {
 					idJugadores[1]=(String)in.readObject();
 					
-					mostrarMensaje("Hilo jugador (2)"+idJugadores[1]);
+					//mostrarMensaje("Hilo jugador (2)"+idJugadores[1]);
+					mostrarMensaje("Hilo jugador (2)"+idJugadoresSinApu[1]);//*added apuestas
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -638,7 +649,9 @@ public class ServidorBJ implements Runnable{
 				datosEnviar.setManoJugador3(manosJugadores.get(2));		
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
-				datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+				//datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+				datosEnviar.setMensaje("Inicias "+idJugadoresSinApu[0]+" tienes "+valorManos[0]);//added apuestas
+				
 				enviarMensajeCliente(datosEnviar);
 				
 				//iniciarRondaJuego(); //despertar al jugador 1 para iniciar el juego
@@ -681,7 +694,8 @@ public class ServidorBJ implements Runnable{
 				datosEnviar.setManoJugador3(manosJugadores.get(2));		
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
-				datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+				//datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+				datosEnviar.setMensaje("Inicias "+idJugadoresSinApu[0]+" tienes "+valorManos[0]);//*added apuestas
 				
 				
 				
@@ -786,18 +800,18 @@ public class ServidorBJ implements Runnable{
 					for(int p = 0; p < 3; p++) {
 						if (manosJugadores.get(p).size() == 2 && valorManos[p] == 21) {
 							apuestas[p] = 3 * (apuestas[p] / 2);
-							mostrarMensaje("¡El jugador " + idJugadores[p] + " gana por BlackJack!");
-							superMensaje += "¡El jugador " + idJugadores[p] + " gana por BlackJack!" + "\n";//added apuestas
+							mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " gana por BlackJack!");
+							superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " gana por BlackJack!" + "\n";//added apuestas
 						}else {
 							if (apuestas[p] > 0) {
 								apuestas[p] = 2 * apuestas[p];
-								mostrarMensaje("¡El jugador " + idJugadores[p] + " recibe del dealer el valor de su apuesta y queda con: " + 
+								mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " recibe del dealer el valor de su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]));
-								superMensaje += "¡El jugador " + idJugadores[p] + " recibe del dealer el valor de su apuesta y queda con: " + 
+								superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " recibe del dealer el valor de su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]) + "\n";//added apuestas
 							}else {
 								//Si el jugador ya había perdido su apuesta, no pasa nada.
-								superMensaje += "¡El jugador " + idJugadores[p] + " ya había perdido su apuesta y queda con : " 
+								superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " ya había perdido su apuesta y queda con : " 
 												+ String.valueOf(apuestas[p]) +"\n";//added apuestas
 							}
 						}
@@ -816,41 +830,41 @@ public class ServidorBJ implements Runnable{
 					for(int p = 0; p < 3; p++) {
 						if (manosJugadores.get(p).size() == 2 && valorManos[p] == 21) {
 							apuestas[p] = 3 * (apuestas[p] / 2);
-							mostrarMensaje("¡El jugador " + idJugadores[p] + " gana por BlackJack! y queda con: " 
+							mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " gana por BlackJack! y queda con: " 
 							+ String.valueOf(apuestas[p]) + "\n");
-							superMensaje += "¡El jugador " + idJugadores[p] + " gana por BlackJack! y queda con: "
+							superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " gana por BlackJack! y queda con: "
 									+ String.valueOf(apuestas[p])  +"\n";
 						}else if(valorManos[p] > valorManos[3]) {
 							if (apuestas[p] > 0) {
 								apuestas[p] = 2 * apuestas[p];
-								mostrarMensaje("¡El jugador " + idJugadores[p] + " recibe del dealer el valor de su apuesta y queda con: " + 
+								mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " recibe del dealer el valor de su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]));
-								superMensaje += "¡El jugador " + idJugadores[p] + " recibe del dealer el valor de su apuesta y queda con: " + 
+								superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " recibe del dealer el valor de su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]) + "\n";
 							}else {
 								//Si el jugador ya había perdido su apuesta, no pasa nada.
-								mostrarMensaje("¡El jugador " + idJugadores[p] + " ya había perdido su apuesta y queda con: " + 
+								mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " ya había perdido su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]));
-								superMensaje += "¡El jugador " + idJugadores[p] + " ya había perdido su apuesta y queda con: " + 
+								superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " ya había perdido su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]) + "\n";
 							}
 						}else if(valorManos[p] == valorManos[3]) {
-							mostrarMensaje("¡El jugador" + idJugadores[p] + " conserva el valor de su apuesta y queda con: " + 
+							mostrarMensaje("¡El jugador" + idJugadoresSinApu[p] + " conserva el valor de su apuesta y queda con: " + 
 									String.valueOf(apuestas[p]));
-							superMensaje += "¡El jugador" + idJugadores[p] + " conserva el valor de su apuesta y queda con: " + 
+							superMensaje += "¡El jugador" + idJugadoresSinApu[p] + " conserva el valor de su apuesta y queda con: " + 
 									String.valueOf(apuestas[p]) + "\n";
 						}else { // Jugador p pierde
 							
 							if(valorManos[p] == 0) {
-								mostrarMensaje("¡El jugador " + idJugadores[p] + " ya había perdido su apuesta y queda con: " + 
+								mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " ya había perdido su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]));
-								superMensaje += "¡El jugador " + idJugadores[p] + " ya había perdido su apuesta y queda con: " + 
+								superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " ya había perdido su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]) + "\n";
 							}else {
 								apuestas[p] = 0;
-								mostrarMensaje("¡El jugador " + idJugadores[p] + " pierde contra el dealer y queda con: " + 
+								mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " pierde contra el dealer y queda con: " + 
 										String.valueOf(apuestas[p]));
-								superMensaje += "¡El jugador " + idJugadores[p] + " pierde contra el dealer y queda con: " + 
+								superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " pierde contra el dealer y queda con: " + 
 										String.valueOf(apuestas[p]) + "\n";
 							}
 							
