@@ -37,11 +37,22 @@ public class VentanaSalaJuego extends JInternalFrame {
 		private GridBagConstraints constraints;
 		
 		public VentanaSalaJuego(String yoId, String jugador2Id, String jugador3Id) {
+			
+			
+			
 			this.yoId = yoId;
 			this.jugador2Id = jugador2Id;
 			this.jugador3Id = jugador3Id;
 			//this.datosRecibidos=datosRecibidos;
-						
+			
+			/*added apuestas
+			this.yoId = yoId.substring(0, firstNumIndex(yoId));
+			this.jugador2Id = jugador2Id.substring(0, firstNumIndex(jugador2Id));
+			this.jugador3Id = jugador3Id.substring(0, firstNumIndex(jugador3Id));
+			
+			*/
+			
+			
 			initGUI();
 			
 			//default window settings
@@ -53,6 +64,53 @@ public class VentanaSalaJuego extends JInternalFrame {
 			this.show();
 		}
 
+		
+		
+		
+		
+		
+		//*added apuestas
+		private int firstNumIndex(String s){
+		    for (int i=0; i<s.length(); i++)
+		    {
+		        if (Character.isDigit(s.charAt(i)))
+		            return i;
+		    }
+		    return -1;
+		  }
+		
+		
+		private int extraerApuesta(String ident) {
+			int index0 = firstNumIndex(ident);
+			int apsta =Integer.valueOf(ident.substring(index0, ident.length()));
+			return apsta;
+		}
+		
+		
+		private String[] strArray (int[] intArr){
+			String[] ans = new String[intArr.length];
+			for (int q = 0; q < intArr.length; q++) {
+				ans[q] = String.valueOf(intArr[q]);
+			}
+			return ans; 
+		}
+		
+		
+		private String[] idsSinApuesta(String[] idsConApu) {
+			String[] ans = new String[idsConApu.length];
+			
+			for (int j = 0; j < 3; j++) {
+				ans[j] = idsConApu[j].substring(0, firstNumIndex(idsConApu[j]));
+			}
+			
+			return ans;
+		}
+		
+		//*
+		
+		
+		
+		
 		private void initGUI() {
 			// TODO Auto-generated method stub
 			//set up JFrame Container y Layout
