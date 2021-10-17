@@ -96,12 +96,14 @@ public class VentanaEntrada extends JInternalFrame {
 			if(nombreJugador.getText().length() == 0 /*|| Integer.valueOf(tfApuestaField.getText()) <= 0 || tfApuestaField.getText().length()==0*/) {
 				JOptionPane.showMessageDialog(null, "Debes ingresar un nombre para identificarte y una apuesta mayor a cero!!");
 			}else {
-				cliente.setIdYo(nombreJugador.getText());
 				
-				cliente.setApuesta(Integer.valueOf(tfApuestaField.getText()));	//*added apuestas
+				cliente.setApuesta(Integer.valueOf(tfApuestaField.getText()));//*added apuestas
+				
+				cliente.setIdYo(nombreJugador.getText() + tfApuestaField.getText());
+				
 				//cliente.setApuesta(Integer.parseInt(tfApuestaField.getText()));	//*added apuestas alternativa
 				
-				ventanaEspera = new VentanaEspera(nombreJugador.getText() /*+ tfApuestaField.getText()*/);	//* added apuestas
+				ventanaEspera = new VentanaEspera(nombreJugador.getText() /*+ tfApuestaField.getText()*/);	//*NOT added apuestas
 				getContainerFrames().add(ventanaEspera);
 				cliente.buscarServidor();
                 cerrarVentanaEntrada();

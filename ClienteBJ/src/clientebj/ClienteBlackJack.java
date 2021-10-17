@@ -153,7 +153,9 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		mostrarMensajes("Jugador estableció Flujos E/S");
 		//mandar nombre jugador
 		mostrarMensajes("Jugador envio nombre " + idYo);
-		enviarMensajeServidor(idYo /*+ String.valueOf(apuestaYo)*/);//*NOT added apuestas
+		enviarMensajeServidor(idYo /*+ String.valueOf(apuestaYo)*/);//* added apuestas
+		
+		
 		
 		//*added apuestas
 		/*mostrarMensajes("Jugador envio apuesta " + String.valueOf(apuestaYo)); //posible error - pendiente
