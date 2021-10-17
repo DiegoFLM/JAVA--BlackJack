@@ -97,9 +97,20 @@ public class ServidorBJ implements Runnable{
 		for (int q = 0; q < intArr.length; q++) {
 			ans[q] = String.valueOf(intArr[q]);
 		}
-		
 		return ans; 
 	}
+	
+	
+	private String[] idsSinApuesta(String[] idsConApu) {
+		String[] ans = new String[idsConApu.length];
+		
+		for (int j = 0; j < 3; j++) {
+			ans[j] = idsConApu[j].substring(0, firstNumIndex(idsConApu[j]));
+		}
+		
+		return ans;
+	}
+	
 	//*
 	
 	
@@ -758,15 +769,72 @@ public class ServidorBJ implements Runnable{
 					datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[3]+" voló :(");
 					pedir=false;
 					mostrarMensaje("El dealer voló");
+					
+					//*added apuestas
+					for(int p = 0; p < 3; p++) {
+						if (manosJugadores.get(p).size() == 2 && valorManos[p] == 21) {
+							apuestas[p] = 3 * (apuestas[p] / 2);
+							mostrarMensaje("¡El jugador" + idJugadores[p] + "gana por BlackJack!");
+						}else {
+							if (apuestas[p] > 0) {
+								apuestas[p] = 2 * apuestas[p];
+								mostrarMensaje("¡El jugador" + idJugadores[p] + "recibe del dealer el valor de su apuesta y queda con: " + 
+										String.valueOf(apuestas[p]));
+							}else {
+								//Si el jugador ya había perdido su apuesta, no pasa nada.
+							}
+						}
+					}
+					
+					//*
+					
 				}else {
 					datosEnviar.setJugadorEstado("plantó");
 					datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[3]+" plantó");
 					pedir=false;
 					mostrarMensaje("El dealer plantó");
+					
+					//*added apuestas
+					for(int p = 0; p < 3; p++) {
+						if (manosJugadores.get(p).size() == 2 && valorManos[p] == 21) {
+							apuestas[p] = 3 * (apuestas[p] / 2);
+							mostrarMensaje("¡El jugador" + idJugadores[p] + "gana por BlackJack!");
+						}else if(valorManos[p] > valorManos[3]) {
+							if (apuestas[p] > 0) {
+								apuestas[p] = 2 * apuestas[p];
+								mostrarMensaje("¡El jugador" + idJugadores[p] + "recibe del dealer el valor de su apuesta y queda con: " + 
+										String.valueOf(apuestas[p]));
+							}else {
+								//Si el jugador ya había perdido su apuesta, no pasa nada.
+								mostrarMensaje("¡El jugador" + idJugadores[p] + "ya había perdido su apuesta y queda con: " + 
+										String.valueOf(apuestas[p]));
+							}
+						}else if(valorManos[p] == valorManos[3]) {
+							mostrarMensaje("¡El jugador" + idJugadores[p] + "conserva el valor de su apuesta y queda con: " + 
+									String.valueOf(apuestas[p]));
+						}else { // Jugador p pierde
+							
+							if(valorManos[p] == 0) {
+								mostrarMensaje("¡El jugador" + idJugadores[p] + "ya había perdido su apuesta y queda con: " + 
+										String.valueOf(apuestas[p]));
+							}else {
+								apuestas[p] = 0;
+								mostrarMensaje("¡El jugador" + idJugadores[p] + "pierde contra el dealer y queda con: " + 
+										String.valueOf(apuestas[p]));
+							}
+							
+							
+						}
+					}
+					
+					//*
 				}
 			}
 			//envia la jugada a los otros jugadores
 			datosEnviar.setCarta(carta);
+			
+			datosEnviar.setApuestas(strArray(apuestas));
+			
 			jugadores[0].enviarMensajeCliente(datosEnviar);
 			jugadores[1].enviarMensajeCliente(datosEnviar);
 			jugadores[2].enviarMensajeCliente(datosEnviar);
