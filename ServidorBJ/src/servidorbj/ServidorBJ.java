@@ -43,6 +43,8 @@ public class ServidorBJ implements Runnable{
 	
 	//variables de control del juego
 	private String[] idJugadores;
+	private String[] idJugadoresSinApu;
+	
 	private int jugadorEnTurno;
 	//private boolean iniciarJuego;
 	private Baraja mazo;
@@ -134,6 +136,7 @@ public class ServidorBJ implements Runnable{
 		mazo = new Baraja();
 		Carta carta;
 		
+		idJugadoresSinApu = new String[3];//*added apuestas
 		//apuestasIniciales = new String[3];	//*added apuestas
 		apuestas = new int[3]; 	//*added apuestas
 		apuestasIniciales = new int[3];	//*added apuestas
@@ -600,6 +603,7 @@ public class ServidorBJ implements Runnable{
 				   //jugador 2 debe esperar su turno
 				try {
 					idJugadores[1]=(String)in.readObject();
+					
 					mostrarMensaje("Hilo jugador (2)"+idJugadores[1]);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
@@ -659,6 +663,7 @@ public class ServidorBJ implements Runnable{
 				   //jugador 3 debe esperar su turno
 				try {
 					idJugadores[2]=(String)in.readObject();
+					idJugadoresSinApu = idsSinApuesta(idJugadores);//*added apuestas
 					mostrarMensaje("Hilo jugador (3) " + idJugadores[2]);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
@@ -773,6 +778,7 @@ public class ServidorBJ implements Runnable{
 				if(valorManos[3]>21) {
 					datosEnviar.setJugadorEstado("voló");
 					datosEnviar.setMensaje("Dealer ahora tiene "+valorManos[3]+" voló :(");
+					superMensaje += "Dealer ahora tiene "+valorManos[3]+"  voló :(\n";
 					pedir=false;
 					mostrarMensaje("El dealer voló");
 					
@@ -810,8 +816,10 @@ public class ServidorBJ implements Runnable{
 					for(int p = 0; p < 3; p++) {
 						if (manosJugadores.get(p).size() == 2 && valorManos[p] == 21) {
 							apuestas[p] = 3 * (apuestas[p] / 2);
-							mostrarMensaje("¡El jugador " + idJugadores[p] + " gana por BlackJack!");
-							superMensaje += "¡El jugador " + idJugadores[p] + " gana por BlackJack!\n";
+							mostrarMensaje("¡El jugador " + idJugadores[p] + " gana por BlackJack! y queda con: " 
+							+ String.valueOf(apuestas[p]) + "\n");
+							superMensaje += "¡El jugador " + idJugadores[p] + " gana por BlackJack! y queda con: "
+									+ String.valueOf(apuestas[p])  +"\n";
 						}else if(valorManos[p] > valorManos[3]) {
 							if (apuestas[p] > 0) {
 								apuestas[p] = 2 * apuestas[p];
