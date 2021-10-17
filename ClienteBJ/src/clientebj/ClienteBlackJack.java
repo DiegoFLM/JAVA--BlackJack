@@ -230,7 +230,10 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			}
 		
 	}
-
+	
+	
+	
+	
 	private void habilitarSalaJuego(DatosBlackJack datosRecibidos) {
 		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {

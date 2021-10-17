@@ -54,6 +54,10 @@ public class ServidorBJ implements Runnable{
 	private int[] valorManos;
 	private DatosBlackJack datosEnviar;
 	
+	//private String[] apuestasIniciales; //* added apuestas
+	private int[] apuestasIniciales; //*added apuestas
+	private int[] apuestas; //* added apuestas
+	
 	public ServidorBJ() {
 	    //inicializar variables de control del juego
 		inicializarVariablesControlRonda();
@@ -68,6 +72,36 @@ public class ServidorBJ implements Runnable{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	//*added apuestas
+	private int firstNumIndex(String s){
+	    for (int i=0; i<s.length(); i++)
+	    {
+	        if (Character.isDigit(s.charAt(i)))
+	            return i;
+	    }
+	    return -1;
+	  }
+	
+	
+	private int extraerApuesta(String ident) {
+		int index0 = firstNumIndex(ident);
+		int apsta =Integer.valueOf(ident.substring(index0, ident.length()));
+		return apsta;
+	}
+	
+	
+	private String[] strArray (int[] intArr){
+		String[] ans = new String[intArr.length];
+		for (int q = 0; q < intArr.length; q++) {
+			ans[q] = String.valueOf(intArr[q]);
+		}
+		
+		return ans; 
+	}
+	//*
+	
 	
     private void inicializareVariablesManejoHilos() {
 		// TODO Auto-generated method stub
@@ -88,6 +122,12 @@ public class ServidorBJ implements Runnable{
 		
 		mazo = new Baraja();
 		Carta carta;
+		
+		//apuestasIniciales = new String[3];	//*added apuestas
+		apuestas = new int[3]; 	//*added apuestas
+		apuestasIniciales = new int[3];	//*added apuestas
+		
+		
 		
 		manoJugador1 = new ArrayList<Carta>();
 		manoJugador2 = new ArrayList<Carta>();
@@ -208,12 +248,22 @@ public class ServidorBJ implements Runnable{
 			datosEnviar.setValorManos(valorManos);
 			datosEnviar.setCarta(carta);
 			datosEnviar.setJugador(idJugadores[indexJugador]);
+		
+			
+			datosEnviar.setApuestas(strArray(apuestas));	//*added apuestas
+			
+			
     		//determinar qué sucede con la carta dada en la mano del jugador y 
 			//mandar mensaje a todos los jugadores
     		if(valorManos[indexJugador]>21) {
     			//jugador Voló
 	    		datosEnviar.setMensaje(idJugadores[indexJugador]+" tienes "+valorManos[indexJugador]+" volaste :(");	
 	    		datosEnviar.setJugadorEstado("voló");
+	    		
+	    		//* added apuestas
+	    		apuestas[indexJugador] = 0;
+	    		datosEnviar.setApuestas(strArray(apuestas));
+	    		//*
 	    		
 	    		jugadores[0].enviarMensajeCliente(datosEnviar);
 	    		jugadores[1].enviarMensajeCliente(datosEnviar);
@@ -228,7 +278,12 @@ public class ServidorBJ implements Runnable{
 					datosEnviar.setValorManos(valorManos);
 					datosEnviar.setJugador(idJugadores[1]);
 					datosEnviar.setJugadorEstado("iniciar");
-					datosEnviar.setMensaje(idJugadores[1]+" te toca jugar y tienes "+valorManos[1]);
+					datosEnviar.setMensaje(idJugadores[1]+" te toca jugar y tienes " + valorManos[1]);
+					
+					//* added apuestas
+		    		apuestas[indexJugador] = 0;
+		    		datosEnviar.setApuestas(strArray(apuestas));
+		    		//*
 					
 					jugadores[0].enviarMensajeCliente(datosEnviar);
 					jugadores[1].enviarMensajeCliente(datosEnviar);
@@ -252,6 +307,11 @@ public class ServidorBJ implements Runnable{
 					datosEnviar.setJugador(idJugadores[2]);
 					datosEnviar.setJugadorEstado("iniciar");
 					datosEnviar.setMensaje(idJugadores[2]+" te toca jugar y tienes "+valorManos[2]);
+					
+					//* added apuestas
+		    		apuestas[indexJugador] = 0;
+		    		datosEnviar.setApuestas(strArray(apuestas));
+		    		//*
 					
 					jugadores[0].enviarMensajeCliente(datosEnviar);
 					jugadores[1].enviarMensajeCliente(datosEnviar);
@@ -292,6 +352,11 @@ public class ServidorBJ implements Runnable{
 					datosEnviar.setJugador("dealer");
 					datosEnviar.setJugadorEstado("iniciar");
 					datosEnviar.setMensaje("Dealer se repartirá carta");
+
+					//* added apuestas
+		    		apuestas[indexJugador] = 0;
+		    		datosEnviar.setApuestas(strArray(apuestas));
+		    		//*
 					
 					jugadores[0].enviarMensajeCliente(datosEnviar);
 					jugadores[1].enviarMensajeCliente(datosEnviar);
@@ -583,7 +648,7 @@ public class ServidorBJ implements Runnable{
 				   //jugador 3 debe esperar su turno
 				try {
 					idJugadores[2]=(String)in.readObject();
-					mostrarMensaje("Hilo jugador (3)"+idJugadores[2]);
+					mostrarMensaje("Hilo jugador (3) " + idJugadores[2]);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -601,6 +666,21 @@ public class ServidorBJ implements Runnable{
 				datosEnviar.setIdJugadores(idJugadores);
 				datosEnviar.setValorManos(valorManos);
 				datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+				
+				
+				
+				
+				//* added apuestas
+	    		apuestasIniciales[0] = extraerApuesta(idJugadores[0]);
+	    		apuestasIniciales[1] = extraerApuesta(idJugadores[1]);
+	    		apuestasIniciales[2] = extraerApuesta(idJugadores[2]);
+	    		
+	    		apuestas = apuestasIniciales;
+	    		
+	    		datosEnviar.setApuestas(strArray(apuestas));
+	    		//*
+	    		
+				
 				enviarMensajeCliente(datosEnviar);
 				
 				
@@ -661,7 +741,7 @@ public class ServidorBJ implements Runnable{
 			manosJugadores.get(3).add(carta);
 			calcularValorMano(carta, 3);
 			
-			mostrarMensaje("El dealer recibe "+carta.toString()+" suma "+ valorManos[3]);
+			mostrarMensaje("El dealer recibe " + carta.toString() + " suma "+ valorManos[3]);
 			
 
     		datosEnviar = new DatosBlackJack();
