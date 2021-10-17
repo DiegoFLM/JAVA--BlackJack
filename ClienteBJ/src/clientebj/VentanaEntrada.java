@@ -21,6 +21,15 @@ public class VentanaEntrada extends JInternalFrame {
 	private VentanaEspera ventanaEspera;
 	private ClienteBlackJack cliente;
 	
+	
+	//*added apuestas
+	private JLabel lApuestaJLabel;
+	private JTextField tfApuestaField;
+	private JPanel pApuesta;
+	//* 
+	
+	
+	
 	private Escucha escucha;
 	
 	public VentanaEntrada(ClienteBlackJack cliente) {
@@ -33,6 +42,9 @@ public class VentanaEntrada extends JInternalFrame {
 				         (ClienteBlackJack.HEIGHT-this.getHeight())/2);
 		this.show();
 	}
+	
+	
+	
 
 	private void initInternalFrame() {
 		// TODO Auto-generated method stub
@@ -46,7 +58,25 @@ public class VentanaEntrada extends JInternalFrame {
 		nombreJugador =	new JTextField(10); 
 		ingresar = new JButton("Ingresar");
 		ingresar.addActionListener(escucha);
-		ingreso.add(labelNombre); ingreso.add(nombreJugador); ingreso.add(ingresar);
+		
+		//*added apuestas
+		lApuestaJLabel = new JLabel("Apuesta:  $");
+		tfApuestaField = new JTextField(10);
+		
+		pApuesta = new JPanel();
+		
+		ingreso.setLayout(new BorderLayout());
+		//*
+		
+		ingreso.add(labelNombre, BorderLayout.WEST); ingreso.add(nombreJugador, BorderLayout.CENTER); 
+		ingreso.add(ingresar, BorderLayout.EAST);
+		
+		//*added apuestas
+		pApuesta.add(lApuestaJLabel);
+		pApuesta.add(tfApuestaField);
+		ingreso.add(pApuesta, BorderLayout.SOUTH);
+		//*
+		
 		add(ingreso,BorderLayout.CENTER);
 	}
 	
@@ -63,11 +93,17 @@ public class VentanaEntrada extends JInternalFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			//cargar Sala de Espera y cerrar Ventana Entrada
-			if(nombreJugador.getText().length()==0) {
-				JOptionPane.showMessageDialog(null, "Debes ingresar un nombre para identificarte!!");
+			if(nombreJugador.getText().length() == 0 /*|| Integer.valueOf(tfApuestaField.getText()) <= 0 || tfApuestaField.getText().length()==0*/) {
+				JOptionPane.showMessageDialog(null, "Debes ingresar un nombre para identificarte y una apuesta mayor a cero!!");
 			}else {
-				cliente.setIdYo(nombreJugador.getText());
-				ventanaEspera = new VentanaEspera(nombreJugador.getText());
+				
+				cliente.setApuesta(Integer.valueOf(tfApuestaField.getText()));//*added apuestas
+				
+				cliente.setIdYo(nombreJugador.getText() + tfApuestaField.getText());
+				
+				//cliente.setApuesta(Integer.parseInt(tfApuestaField.getText()));	//*added apuestas alternativa
+				
+				ventanaEspera = new VentanaEspera(nombreJugador.getText() /*+ tfApuestaField.getText()*/);	//*NOT added apuestas
 				getContainerFrames().add(ventanaEspera);
 				cliente.buscarServidor();
                 cerrarVentanaEntrada();

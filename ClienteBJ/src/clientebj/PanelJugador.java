@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -33,7 +34,16 @@ public class PanelJugador extends JPanel {
 		dibujoRecordar = new ArrayList<Recuerdo>();
 		this.setPreferredSize(new Dimension(ANCHO,ALTO));
 		TitledBorder bordes;
-		bordes = BorderFactory.createTitledBorder(nombreJugador);
+		
+		if (nombreJugador.equals("Dealer")){//*added apuestas
+			bordes = BorderFactory.createTitledBorder(nombreJugador);
+			//JOptionPane.showMessageDialog(null, nombreJugador);//*added apuestas
+		}else {//*added apuestas
+			bordes = BorderFactory.createTitledBorder(nombreJugador.substring(0, firstNumIndex(nombreJugador)) );//*added apuestas
+		}
+		
+		
+		
 		this.setBorder(bordes);
 		
 		
@@ -65,6 +75,47 @@ public class PanelJugador extends JPanel {
 		}	
 	}
 	
+	
+	
+	
+	//*added apuestas
+	private int firstNumIndex(String s){
+	    for (int i=0; i<s.length(); i++)
+	    {
+	        if (Character.isDigit(s.charAt(i)))
+	            return i;
+	    }
+	    return -1;
+	  }
+	
+	
+	private int extraerApuesta(String ident) {
+		int index0 = firstNumIndex(ident);
+		int apsta =Integer.valueOf(ident.substring(index0, ident.length()));
+		return apsta;
+	}
+	
+	
+	private String[] strArray (int[] intArr){
+		String[] ans = new String[intArr.length];
+		for (int q = 0; q < intArr.length; q++) {
+			ans[q] = String.valueOf(intArr[q]);
+		}
+		return ans; 
+	}
+	
+	
+	private String[] idsSinApuesta(String[] idsConApu) {
+		String[] ans = new String[idsConApu.length];
+		
+		for (int j = 0; j < 3; j++) {
+			ans[j] = idsConApu[j].substring(0, firstNumIndex(idsConApu[j]));
+		}
+		
+		return ans;
+	}
+	
+	//*
 	
 	
 	

@@ -41,6 +41,9 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 	
 	//variables de control del juego
 	private String idYo, jugador2, jugador3;
+	
+	private int apuestaYo;
+	
 	private boolean turno;
 	private DatosBlackJack datosRecibidos;
 	
@@ -104,6 +107,15 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		idYo=id;
 	}
 	
+	
+	//*added apuestas
+	public void setApuesta(int apuesta) {
+		apuestaYo = apuesta;
+	}
+	//*
+	
+	
+	
 	private void mostrarMensajes(String mensaje) {
 		System.out.println(mensaje);
 	}
@@ -140,8 +152,16 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		mostrarMensajes("Jugador conectado al servidor");
 		mostrarMensajes("Jugador estableció Flujos E/S");
 		//mandar nombre jugador
-		mostrarMensajes("Jugador envio nombre "+idYo);
-		enviarMensajeServidor(idYo);
+		mostrarMensajes("Jugador envio nombre " + idYo);
+		enviarMensajeServidor(idYo /*+ String.valueOf(apuestaYo)*/);//* added apuestas
+		
+		
+		
+		//*added apuestas
+		/*mostrarMensajes("Jugador envio apuesta " + String.valueOf(apuestaYo)); //posible error - pendiente
+		enviarMensajeServidor(String.valueOf(apuestaYo));*/
+		//*
+		
 		//procesar comunicación con el ServidorBlackJack
 		iniciarHilo();	
 	}
@@ -210,7 +230,10 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 			}
 		
 	}
-
+	
+	
+	
+	
 	private void habilitarSalaJuego(DatosBlackJack datosRecibidos) {
 		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {
