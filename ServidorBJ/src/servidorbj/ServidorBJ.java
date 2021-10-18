@@ -16,6 +16,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.sound.midi.VoiceStatus;
+import javax.swing.JOptionPane;
+
 import comunes.Baraja;
 import comunes.Carta;
 import comunes.DatosBlackJack;
@@ -143,6 +146,7 @@ public class ServidorBJ implements Runnable{
 		
 		
 		
+		
 		manoJugador1 = new ArrayList<Carta>();
 		manoJugador2 = new ArrayList<Carta>();
 		manoJugador3 = new ArrayList<Carta>();
@@ -172,6 +176,116 @@ public class ServidorBJ implements Runnable{
 		manosJugadores.add(manoJugador3);
 		manosJugadores.add(manoDealer);
 	}
+	
+	
+	//*added restart
+	//*added restart
+	public void restart() {
+		
+		//inicializarVariablesControlRonda();
+		////////////***inicializarVaciables
+		jugadorEnTurno = 0;
+		valorManos = new int[4];
+		
+		mazo = new Baraja();
+		Carta carta;
+		
+		manoJugador1 = new ArrayList<Carta>();
+		manoJugador2 = new ArrayList<Carta>();
+		manoJugador3 = new ArrayList<Carta>();
+		manoDealer = new ArrayList<Carta>();
+		
+		for(int i=1;i<=2;i++) {
+			  carta = mazo.getCarta();
+			  manoJugador1.add(carta);
+			  calcularValorMano(carta,0);
+			  carta = mazo.getCarta();
+			  manoJugador2.add(carta);
+			  calcularValorMano(carta,1);
+			  carta = mazo.getCarta();
+			  manoJugador3.add(carta);
+			  calcularValorMano(carta,2);
+			}
+			//Carta inicial Dealer
+			carta = mazo.getCarta();
+			manoDealer.add(carta);
+			calcularValorMano(carta,3);
+			
+			//gestiona las tres manos en un solo objeto para facilitar el manejo del hilo
+			manosJugadores = new ArrayList<ArrayList<Carta>>(4);
+			manosJugadores.add(manoJugador1);
+			manosJugadores.add(manoJugador2);
+			manosJugadores.add(manoJugador3);
+			manosJugadores.add(manoDealer);
+		////////////***
+		
+		
+		
+		
+		datosEnviar = new DatosBlackJack();
+		datosEnviar.setManoDealer(manosJugadores.get(3));
+		datosEnviar.setManoJugador1(manosJugadores.get(0));
+		datosEnviar.setManoJugador2(manosJugadores.get(1));	
+		datosEnviar.setManoJugador3(manosJugadores.get(2));		
+		datosEnviar.setIdJugadores(idJugadores);
+		datosEnviar.setValorManos(valorManos);
+		datosEnviar.setJugador(idJugadores[0]);
+		datosEnviar.setJugadorEstado("iniciar");
+		//datosEnviar.setMensaje("Inicias "+idJugadores[0]+" tienes "+valorManos[0]);
+		datosEnviar.setMensaje("Inicias "+idJugadoresSinApu[0]+" tienes "+valorManos[0]);//*added apuestas
+		
+		
+		
+		
+		//* added apuestas
+		apuestasIniciales[0] = extraerApuesta(idJugadores[0]);
+		apuestasIniciales[1] = extraerApuesta(idJugadores[1]);
+		apuestasIniciales[2] = extraerApuesta(idJugadores[2]);
+		
+		apuestas = apuestasIniciales;
+		
+		datosEnviar.setApuestas(strArray(apuestas));
+		//*
+		
+		
+		jugadores[0].enviarMensajeCliente(datosEnviar);
+		jugadores[1].enviarMensajeCliente(datosEnviar);
+		jugadores[2].enviarMensajeCliente(datosEnviar);
+		
+		//esperarInicio.signalAll();
+		jugadores[1].setSuspendido(true);
+		
+		//analizarMensaje("iniciar", 0);//		ESTA LINEA SE DEBE CAMBIAR.
+		
+		
+		
+		
+		
+		/*iniciarRondaJuego(); //despertar al jugador 1 para iniciar el juego
+		
+		
+		
+		
+		
+		//  /  *
+		mostrarMensaje("Bloquea al servidor para poner en espera de turno al jugador 3");
+		bloqueoJuego.lock();
+		try {
+			mostrarMensaje("Pone en espera de turno al jugador 3");
+			esperarTurno.await();
+			mostrarMensaje("Despierta de la espera de inicio del juego al jugador 1");
+            //
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			bloqueoJuego.unlock();
+		}
+		// *  /
+		 */
+	}
+	//*
+	
 
 	private void calcularValorMano(Carta carta, int i) {
 		// TODO Auto-generated method stub
@@ -229,8 +343,8 @@ public class ServidorBJ implements Runnable{
     	}			
 	}
 	
-    private boolean seTerminoRonda() {
-       return false;	
+    private boolean seTerminoRonda( boolean seTermino) {
+       return seTermino;
     }
     
     private void analizarMensaje(String entrada, int indexJugador) {
@@ -729,10 +843,10 @@ public class ServidorBJ implements Runnable{
 					e.printStackTrace();
 				}finally {
 					bloqueoJuego.unlock();
-				}	
+				}
 			}
 			
-			while(!seTerminoRonda()) {
+			while(!seTerminoRonda(false)) {
 				try {
 					entrada = (String) in.readObject();
 					analizarMensaje(entrada,indexJugador);
@@ -829,7 +943,7 @@ public class ServidorBJ implements Runnable{
 					//*added apuestas
 					for(int p = 0; p < 3; p++) {
 						if (manosJugadores.get(p).size() == 2 && valorManos[p] == 21) {
-							apuestas[p] = 3 * (apuestas[p] / 2);
+							apuestas[p] += 3 * (apuestas[p] / 2);
 							mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " gana por BlackJack! y queda con: " 
 							+ String.valueOf(apuestas[p]) + "\n");
 							superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " gana por BlackJack! y queda con: "
@@ -844,7 +958,7 @@ public class ServidorBJ implements Runnable{
 							}else {
 								//Si el jugador ya había perdido su apuesta, no pasa nada.
 								mostrarMensaje("¡El jugador " + idJugadoresSinApu[p] + " ya había perdido su apuesta y queda con: " + 
-										String.valueOf(apuestas[p]));
+										String.valueOf(apuestas[p]));  
 								superMensaje += "¡El jugador " + idJugadoresSinApu[p] + " ya había perdido su apuesta y queda con: " + 
 										String.valueOf(apuestas[p]) + "\n";
 							}
@@ -889,7 +1003,11 @@ public class ServidorBJ implements Runnable{
 			jugadores[1].enviarMensajeCliente(datosEnviar);
 			jugadores[2].enviarMensajeCliente(datosEnviar);
 				
+			
         }//fin while
+        if (JOptionPane.showConfirmDialog(null, "¿Desea reiniciar?") == JOptionPane.YES_OPTION) {
+        	restart();
+        }
         
 	}
     

@@ -241,8 +241,18 @@ public class VentanaSalaJuego extends JInternalFrame {
 			plantar.setEnabled(turno);
 		}
 		
+		
+		//*added restart
+		public void restart() {
+			yo.olvidar();
+			jugador2.olvidar();
+			jugador3.olvidar();
+		}
+		//*
+		
 		public void pintarCartasInicio(DatosBlackJack datosRecibidos) {
 			if(datosRecibidos.getIdJugadores()[0].equals(yoId)) {
+				//restart();
 				yo.pintarCartasInicio(datosRecibidos.getManoJugador1());
 				if (datosRecibidos.getIdJugadores()[1].equals(jugador2Id)) {
 					jugador2.pintarCartasInicio(datosRecibidos.getManoJugador2());
@@ -309,7 +319,7 @@ public class VentanaSalaJuego extends JInternalFrame {
 						      }
 						}
 					} 
-			 }else {//movidas de los otros jugadores
+			}else {//movidas de los otros jugadores
 				 
 				 	//Movida del jugador2
 					if(datosRecibidos.getJugador().equals(jugador2Id)) {

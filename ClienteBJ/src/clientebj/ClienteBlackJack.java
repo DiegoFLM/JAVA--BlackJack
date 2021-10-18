@@ -27,7 +27,7 @@ import comunes.DatosBlackJack;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ClienteBlackJack. 
+ * The Class ClienteBlackJack.
  * 
  */
 public class ClienteBlackJack extends JFrame implements Runnable{
@@ -217,6 +217,17 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 					mostrarMensajes("Cliente hilo run recibiendo mensaje servidor ");
 					mostrarMensajes(datosRecibidos.getJugador()+" "+datosRecibidos.getJugadorEstado());
 	              
+					
+					//*added restart
+					//restart(datosRecibidos);
+					
+					//ventanaSalaJuego = new VentanaSalaJuego(idYo, jugador2, jugador3);
+					//remove(ventanaSalaJuego);
+					//habilitarSalaJuego(datosRecibidos);
+					
+					//*
+					restart(datosRecibidos);
+					
 					ventanaSalaJuego.pintarTurno(datosRecibidos);
 					
 				} catch (ClassNotFoundException e) {
@@ -231,8 +242,41 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 		
 	}
 	
-	
-	
+	//*added restart
+	private void restart(DatosBlackJack datosRecibidos) {
+		/*remove(ventanaSalaJuego);
+		//ventanaEspera = (VentanaEspera)containerInternalFrames.getComponent(0);
+		//ventanaEspera.cerrarSalaEspera();
+		ventanaSalaJuego = new VentanaSalaJuego(idYo, jugador2, jugador3);
+		ventanaSalaJuego.pintarCartasInicio(datosRecibidos);
+		
+		adicionarInternalFrame(ventanaSalaJuego);
+        if(turno) {
+        	ventanaSalaJuego.activarBotones(turno);
+        }*/
+		
+		remove(ventanaSalaJuego);
+		//habilitarSalaJuego(datosRecibidos);
+		
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				//ventanaEspera = (VentanaEspera)containerInternalFrames.getComponent(0);
+				//ventanaEspera.cerrarSalaEspera();
+				ventanaSalaJuego = new VentanaSalaJuego(idYo, jugador2, jugador3);
+				ventanaSalaJuego.pintarCartasInicio(datosRecibidos);
+				adicionarInternalFrame(ventanaSalaJuego);
+                if(turno) {
+                	ventanaSalaJuego.activarBotones(turno);
+                }
+			}
+			
+		});
+		
+	}
+	//*
 	
 	private void habilitarSalaJuego(DatosBlackJack datosRecibidos) {
 		// TODO Auto-generated method stub
@@ -242,7 +286,7 @@ public class ClienteBlackJack extends JFrame implements Runnable{
 				// TODO Auto-generated method stub
 				ventanaEspera = (VentanaEspera)containerInternalFrames.getComponent(0);
 				ventanaEspera.cerrarSalaEspera();
-				ventanaSalaJuego = new VentanaSalaJuego(idYo,jugador2, jugador3);
+				ventanaSalaJuego = new VentanaSalaJuego(idYo, jugador2, jugador3);
 				ventanaSalaJuego.pintarCartasInicio(datosRecibidos);
 				adicionarInternalFrame(ventanaSalaJuego);
                 if(turno) {

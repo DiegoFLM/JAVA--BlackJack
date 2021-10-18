@@ -41,20 +41,28 @@ public class PanelJugador extends JPanel {
 		}else {//*added apuestas
 			bordes = BorderFactory.createTitledBorder(nombreJugador.substring(0, firstNumIndex(nombreJugador)) );//*added apuestas
 		}
-		
-		
-		
 		this.setBorder(bordes);
-		
-		
 	}
+	
+	//*added restart
+	public void olvidar() {
+		dibujoRecordar = new ArrayList<Recuerdo>();
+	}
+	//*
+	
+	
 	
 	public void pintarCartasInicio(ArrayList<Carta> manoJugador) {
 		x=5;
-	    for(int i=0;i<manoJugador.size();i++) {
-	    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x));
-	    	x+=27;
-	    }			
+		if(manoJugador == null) {
+			
+		}else {
+			for(int i=0;i<manoJugador.size();i++) {
+		    	dibujoRecordar.add(new Recuerdo(manoJugador.get(i),x));
+		    	x+=27;
+		    }	
+		}
+	    		
 	    repaint();
 	}
 	
